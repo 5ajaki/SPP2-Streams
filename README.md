@@ -16,7 +16,7 @@ This document outlines the technical requirements for the executable proposal to
 ENS Treasury → Stream Management Pod → Individual Service Providers
 ```
 
-### Current Status (as of June 2, 2025)
+### Current Status
 
 > **Note**: SPP1 streams continue running as planned while providers complete T&Cs and due diligence for SPP2
 
@@ -40,152 +40,121 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 ## Required Transactions
 
+> **⚠️ Important**: All contract addresses and parameter values should be verified before creating the executable proposal. Some Superfluid contract addresses may need to be confirmed from their documentation.
+
 ### 1. Increase USDC Allowance
 
 **Objective**: Provide sufficient allowance for full program duration plus 6-month buffer
 
-Season 2 has a two-tier funding structure:
+**Calculation**:
 
-- **Two-year streams**: $1.4M/year × 2.5 years (2 years + 6-month buffer) = $3.5M
-- **One-year streams**: $3.1M/year × 1.5 years (1 year + 6-month buffer) = $4.65M
-- **Total required**: $8.15M USDC
-- **Current remaining**: ~$0.9M USDC
-- **Additional allowance needed**: ~$7.25M USDC
+- Two-year streams: $1.4M/year × 2.5 years = $3.5M
+- One-year streams: $3.1M/year × 1.5 years = $4.65M
+- Total required: $8.15M
+- Current remaining: ~$0.9M
+- **Additional needed: ~$7.25M**
 
-**Transaction**:
+**Function**: `approve(address spender, uint256 amount)`
 
-```json
-{
-  "target": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-  "value": 0,
-  "calldata": ADD_CALLDATA_HERE
-}
-```
+**Parameters**:
 
-Target: [`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) (USDC Token)
+- `spender`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
+- `amount`: `7250000000000` (7.25M USDC with 6 decimals)
+
+**Target**: [`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) (USDC Token)
 
 ### 2. Update Superfluid Stream Rate
 
 **Objective**: Increase flow rate from wallet.ensdao.eth to Stream Management Pod
 
-- **Current rate**: 0.1141 USDC/second (~$3.6M/year, but effectively $2.5M with 6 providers)
-- **New rate**: 0.1427 USDC/second (~$4.5M/year)
-- **Increase**: 25% from original rate
+**Current vs New**:
 
-> **Note**: With backdating to May 26, 2025, Superfluid will automatically handle the retroactive payment difference when the new stream rate is applied.
+- Current: 0.1141 USDC/second (~$3.6M/year)
+- New: 0.1427 USDC/second (~$4.5M/year)
+- Increase: 25%
+
+**Function**: `updateFlow(address token, address receiver, int96 flowRate)`
+
+**Parameters**:
+
+- `token`: `0x1ba8603da702602a8657980e825a6daa03dee93a` (USDCx Super Token)
+- `receiver`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
+- `flowRate`: `142694063926940` (0.1427 USDC/second in wei/second with 6 decimals)
+
+**Target**: Superfluid CFAv1 contract (need to verify exact address)
+
+**Note**: This adjusts the flow rate going forward. Underpayments from May 26 to activation date are handled separately.
 
 ### 3. Update Autowrapper Parameters
 
 **Objective**: Scale autowrapper limits for higher flow rate
 
-**Current limits** (from EP5.2):
+**Current vs New**:
 
-- Lower limit: 200,000 USDCx
-- Upper limit: 500,000 USDCx
+- Current: Lower 200k, Upper 500k USDCx
+- New: Lower 250k, Upper 625k USDCx (25% increase)
 
-**New limits** (25% increase):
+**Function**: `setLimits(uint256 lowerLimit, uint256 upperLimit)`
 
-- Lower limit: 250,000 USDCx
-- Upper limit: 625,000 USDCx
+**Parameters**:
 
-### 4. Enable Backdated Streams
+- `lowerLimit`: `250000000000` (250,000 USDCx with 6 decimals)
+- `upperLimit`: `625000000000` (625,000 USDCx with 6 decimals)
 
-**Consideration**: Streams should start retroactively to ensure full allocation despite administrative delays
+**Target**: Stream Management Pod Autowrapper contract
 
-## Stream Transition Approach: Managing Overlapping Streams
+## Stream Transition Approach
 
-### The Challenge
+### Overview
 
-- **All SPP2 streams must begin May 26, 2025** (per program rules)
-- **Continuing providers keep receiving SPP1 rates** (as planned, while completing paperwork)
-- **All providers receive rate increases** in SPP2 (simplifying calculations)
+- **Continuing providers**: Adjust stream rate and send underpayment compensation
+- **New providers**: Start fresh streams at SPP2 rates
 
-### Solution: Backdating with Underpayment Adjustments
+### Implementation Steps
 
-Since all continuing providers receive higher rates in SPP2:
+1. **For continuing providers:**
 
-1. **Calculate underpayment** for each continuing provider:
-   - Underpayment = (SPP2 rate - SPP1 rate) × days since May 26th
-2. **Add underpayment to initial buffer** when starting SPP2 stream
-3. **Backdate SPP2 stream** to May 26, 2025 11:53 PM UTC
-4. **Result**: Provider receives correct total amount from May 26th
+   - Calculate underpayment from May 26 to activation date using the tools
+   - Update stream to new SPP2 rate
+   - Send underpayment as one-time USDC payment
 
-### Implementation Tool
+2. **For new providers:**
+   - Simply start new stream at SPP2 rate
+   - No underpayment calculation needed
 
-**Underpayment calculators are available in the [`tools/`](tools/) directory:**
+### Underpayment Calculation Tools
 
-- **Web Calculator**: [`tools/spp2-underpayment-calculator.html`](tools/spp2-underpayment-calculator.html) - Visual interface with date/time selection
-- **CLI Tool**: [`tools/underpayment-calc.js`](tools/underpayment-calc.js) - Command-line tool for scripting
+**Available in the [`tools/`](tools/) directory:**
 
-Both tools calculate the exact underpayment amount based on:
+- **Web Calculator**: [`tools/spp2-underpayment-calculator.html`](tools/spp2-underpayment-calculator.html)
+- **CLI Tool**: [`tools/underpayment-calc.js`](tools/underpayment-calc.js)
+
+Both tools calculate the exact underpayment based on:
 
 - Provider's SPP1 and SPP2 rates
 - Exact activation date/time
 - Time elapsed since May 26, 2025 11:53 PM UTC
 
-See the [tools documentation](tools/README.md) for detailed usage instructions.
-
-### Implementation Steps
-
-1. **For each continuing provider, calculate:**
-
-   ```
-   Days receiving SPP1 = Enactment date - May 26, 2025
-   SPP1 daily rate = Annual SPP1 amount ÷ 365.25
-   SPP2 daily rate = Annual SPP2 amount ÷ 365.25
-   Daily underpayment = SPP2 daily rate - SPP1 daily rate
-   Total underpayment = Days × Daily underpayment
-   ```
-
-2. **When executing transitions:**
-   - Stop SPP1 stream
-   - Calculate standard buffer for SPP2 stream
-   - Add underpayment to buffer
-   - Start SPP2 stream backdated to May 26, 2025 11:53 PM UTC
-
 ### Example Calculation
 
-Provider receiving $500k SPP1, moving to $600k SPP2, transitioning 10 days after May 26th:
+Provider receiving $500k SPP1, moving to $600k SPP2, activated after program start:
 
-- SPP1 daily: $1,369.86
-- SPP2 daily: $1,643.84
-- Daily underpayment: $273.98
-- 10 days underpayment: $2,739.80
-- Action: Add $2,739.80 to initial buffer
+- Time elapsed: ~10 days
+- Daily difference: $273.98 ($1,643.84 - $1,369.86)
+- **Underpayment owed: $2,739.80**
 
-### Required Information for Execution
+### Provider Tracking Table
 
-To implement the adjusted buffer method, we need:
-
-1. **For each continuing provider:**
-
-   - Current SPP1 annual allocation
-   - New SPP2 annual allocation (from EP 6.10)
-   - Provider wallet address
-   - Standard buffer amount (typically 1-2 months)
-
-2. **Execution timing:**
-
-   - Exact execution date/time
-   - Days elapsed since May 26, 2025
-
-3. **New providers:**
-   - SPP2 annual allocation
-   - Provider wallet address
-   - Standard buffer amount
-
-### Provider Adjustment Tracking Table
-
-| Provider          | Type       | SPP1 Rate | SPP2 Rate  | Days Late | Addition | Notes         |
-| ----------------- | ---------- | --------- | ---------- | --------- | -------- | ------------- |
-| ETH.LIMO          | Continuing | $500,000  | $700,000   | X         | +$X,XXX  | 2-year stream |
-| Namehash Labs     | Continuing | $600,000  | $1,100,000 | X         | +$X,XXX  | 1-year stream |
-| Blockful          | Continuing | $300,000  | $700,000   | X         | +$X,XXX  | 2-year stream |
-| Unruggable        | Continuing | $400,000  | $400,000   | X         | +$0      | Same rate     |
-| Ethereum Identity | Continuing | $500,000  | $500,000   | X         | +$0      | Same rate     |
-| Namespace         | Continuing | $200,000  | $400,000   | X         | +$X,XXX  | 1-year stream |
-| JustaName         | New        | N/A       | $300,000   | N/A       | $0       | Full backdate |
-| ZK Email          | New        | N/A       | $400,000   | N/A       | $0       | Full backdate |
+| Provider          | Type       | SPP1 Rate | SPP2 Rate  | Stream Type | Underpayment |
+| ----------------- | ---------- | --------- | ---------- | ----------- | ------------ |
+| ETH.LIMO          | Continuing | $500,000  | $700,000   | 2-year      | Calculate    |
+| Namehash Labs     | Continuing | $600,000  | $1,100,000 | 1-year      | Calculate    |
+| Blockful          | Continuing | $300,000  | $700,000   | 2-year      | Calculate    |
+| Unruggable        | Continuing | $400,000  | $400,000   | 1-year      | Calculate    |
+| Ethereum Identity | Continuing | $500,000  | $500,000   | 1-year      | Calculate    |
+| Namespace         | Continuing | $200,000  | $400,000   | 1-year      | Calculate    |
+| JustaName         | New        | N/A       | $300,000   | 1-year      | N/A          |
+| ZK Email          | New        | N/A       | $400,000   | 1-year      | N/A          |
 
 ## Key Contract Addresses
 
@@ -203,12 +172,11 @@ To implement the adjusted buffer method, we need:
 - **EP 6.3 Vote**: February 2025 (approved $4.5M budget and program renewal)
 - **EP 6.10 Vote**: May 7-12, 2025 (selected SPP2 providers)
 - **SPP2 Target Start**: May 26, 2025 (2 weeks after EP 6.10)
-- **Current Date**: June 2, 2025
 - **Allowance Depletion**: ~August 2025 (at Season 2 rate)
 
 ### Implementation Priority
 
-**Standard Practice**: Like SPP1's implementation in February 2024, continuing providers continue receiving their existing rates while completing paperwork. The buffer adjustment method ensures all providers receive their full SPP2 allocation from May 26, 2025 through simple underpayment additions.
+**Standard Practice**: Like SPP1's implementation in February 2024, continuing providers continue receiving their existing rates while completing paperwork. The underpayment compensation method ensures all providers receive their full SPP2 allocation from May 26, 2025 through direct payments.
 
 ## Historical Context
 
@@ -251,8 +219,6 @@ One-year streams (with 6-month buffer): $3.1M × 1.5 = $4.65M
 Total required: $8.15M
 Current remaining: ~$0.9M
 Additional needed: ~$7.25M
-
-Note: Backdating handles all payment differentials automatically
 ```
 
 ### Autowrapper Scaling
@@ -286,14 +252,21 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
 
 ## Next Steps
 
-1. **Confirm SPP2 provider allocations** from EP 6.10 results
-2. **Map 6 continuing providers** to their SPP1 and SPP2 allocations
-3. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
-4. **Calculate adjustment amounts** for each continuing provider as they complete paperwork
-5. **Draft executable proposal** with specific calldata
-6. **Verify contract addresses** and current balances
-7. **Submit for DAO vote** with adequate time before allowance depletion
-8. **Execute transitions individually** as providers complete requirements
+1. ✅ **Provider allocations confirmed** - SPP2 rates defined in EP 6.10
+2. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
+3. **Verify current contract state**:
+   - Current USDC allowance remaining
+   - Active stream configurations
+   - Superfluid contract addresses
+4. **Draft executable proposal** with three main transactions:
+   - Increase USDC allowance
+   - Update master stream rate to $4.5M/year
+   - Update autowrapper limits
+5. **Submit for DAO vote** before allowance depletion (~August 2025)
+6. **After proposal execution**, for each provider:
+   - Calculate exact underpayment using the tools
+   - Execute stream transitions as paperwork completes
+   - Send underpayment compensations
 
 ## Notes
 
@@ -303,7 +276,7 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
   - ENS DAO [Timelock](https://etherscan.io/address/0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7)
   - ENS DAO [Meta-Governance Working Group Safe](https://etherscan.io/address/0x91c32893216dE3eA0a55ABb9851f581d4503d39b)
 - **Implementation Pattern**: Mirrors SPP1 where providers continued receiving funds while completing paperwork
-- **Backdating**: All SPP2 streams backdated to May 26, 2025; continuing providers receive buffer additions for underpayments
+- **Underpayment Compensation**: Continuing providers receive direct payments for the difference between SPP1 and SPP2 rates from May 26, 2025
 
 ---
 
