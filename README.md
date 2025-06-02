@@ -6,6 +6,8 @@ This document outlines the technical requirements for the executable proposal to
 
 > **📚 Historical Context**: For details on how SPP1 was implemented, see [SPP1 Technical History](docs/SPP1-History.md)
 
+> **🧮 Calculation Tools**: Underpayment calculators for continuing providers are available in the [`tools/`](tools/) directory.
+
 ## Current Situation
 
 ### Stream Architecture
@@ -105,16 +107,23 @@ Since all continuing providers receive higher rates in SPP2:
 1. **Calculate underpayment** for each continuing provider:
    - Underpayment = (SPP2 rate - SPP1 rate) × days since May 26th
 2. **Add underpayment to initial buffer** when starting SPP2 stream
-3. **Backdate SPP2 stream** to May 26, 2025 11:50 PM UTC
+3. **Backdate SPP2 stream** to May 26, 2025 11:53 PM UTC
 4. **Result**: Provider receives correct total amount from May 26th
 
 ### Implementation Tool
 
-A calculation app will be developed to:
+**Underpayment calculators are available in the [`tools/`](tools/) directory:**
 
-- Input: Provider name, SPP1 rate, SPP2 rate, enactment date
-- Output: Exact backdate timestamp and buffer adjustment amount
-- Ensures precise calculations for each provider's transition
+- **Web Calculator**: [`tools/spp2-underpayment-calculator.html`](tools/spp2-underpayment-calculator.html) - Visual interface with date/time selection
+- **CLI Tool**: [`tools/underpayment-calc.js`](tools/underpayment-calc.js) - Command-line tool for scripting
+
+Both tools calculate the exact underpayment amount based on:
+
+- Provider's SPP1 and SPP2 rates
+- Exact activation date/time
+- Time elapsed since May 26, 2025 11:53 PM UTC
+
+See the [tools documentation](tools/README.md) for detailed usage instructions.
 
 ### Implementation Steps
 
@@ -132,7 +141,7 @@ A calculation app will be developed to:
    - Stop SPP1 stream
    - Calculate standard buffer for SPP2 stream
    - Add underpayment to buffer
-   - Start SPP2 stream backdated to May 26, 2025 11:50 PM UTC
+   - Start SPP2 stream backdated to May 26, 2025 11:53 PM UTC
 
 ### Example Calculation
 
@@ -279,7 +288,7 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
 
 1. **Confirm SPP2 provider allocations** from EP 6.10 results
 2. **Map 6 continuing providers** to their SPP1 and SPP2 allocations
-3. **Build calculation app** to compute exact backdates and buffer additions
+3. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
 4. **Calculate adjustment amounts** for each continuing provider as they complete paperwork
 5. **Draft executable proposal** with specific calldata
 6. **Verify contract addresses** and current balances
