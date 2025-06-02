@@ -322,10 +322,8 @@ Rounded: 142694063926940640
 1. **USDC Allowance Calculation**:
 
    Total needed: $7.025M (from README)
-   Current remaining: ~$0.9M
-   New allowance needed: ~$6.125M
-
-   Add buffer for safety: $7.5M total
+   Current remaining: $550,000 ($169k allowance + $381k USDCx)
+   New allowance needed: $6,475,000
 
 2. **Transition Timeline**:
 

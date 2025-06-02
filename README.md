@@ -21,8 +21,8 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 > **Note**: SPP1 streams continue running as planned while providers complete T&Cs and due diligence for SPP2
 
 - **Original allowance**: 5.4M USDC (set in EP5.2, February 2024)
-- **Consumed over ~16 months**: ~4.5M USDC (estimated)
-- **Remaining allowance**: ~0.9M USDC (estimated)
+- **Consumed over ~16 months**: ~$4.85M (5.4M - 0.55M remaining)
+- **Remaining allowance**: $550,000 ($169k on auto-wrapper + $381k USDCx in stream)
 - **Active streams**: 6 providers continuing at SPP1 rates
 - **Current flow rate**: ~$2.5M/year (6 active SPP1 streams)
 - **SPP2 program start**: May 26, 2025 (streams enacted individually as paperwork completes)
@@ -51,15 +51,15 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - Two-year streams: $1.4M/year × 2.25 years = $3.15M
 - One-year streams: $3.1M/year × 1.25 years = $3.875M
 - Total required: $7.025M
-- Current remaining: ~$0.9M
-- **Additional needed: ~$6.125M**
+- Current remaining: $550,000 ($169k allowance + $381k USDCx in stream)
+- **Additional needed: $6,475,000**
 
 **Function**: `approve(address spender, uint256 amount)`
 
 **Parameters**:
 
 - `spender`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
-- `amount`: `6125000000000` (6.125M USDC with 6 decimals)
+- `amount`: `6475000000000` (6.475M USDC with 6 decimals)
 
 **Target**: [`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) (USDC Token)
 
@@ -217,8 +217,8 @@ Superfluid Precision:
 Two-year streams (with 3-month buffer): $1.4M × 2.25 = $3.15M
 One-year streams (with 3-month buffer): $3.1M × 1.25 = $3.875M
 Total required: $7.025M
-Current remaining: ~$0.9M
-Additional needed: ~$6.125M
+Current remaining: $550,000
+Additional needed: $6,475,000
 ```
 
 ### Autowrapper Scaling

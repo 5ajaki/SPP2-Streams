@@ -1,0 +1,19 @@
+,Description,Value,Notes
+SPP1 and SPP2 context,Current allowance,"169,000",Allowance on auto-wrapper https://app.superfluid.org/auto-wrap?view=0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
+,USDCx left on stream,"381,000",But there is still 380k in the stream: https://app.superfluid.org/?view=0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
+,"Extra months - transition ""fat""",3,As approved on https://snapshot.box/#/s:ens.eth/proposal/0x0cca1cf36731203e235b0e2de9041be3a16d9cdeadff6e15e1f1215c611e12ef
+SPP2 breakdown,2 year spp2 yearly budget,"1,400,000",
+,2 year spp2 stream duration,27,24 months + Transition
+,2 year spp2 total allocation,"3,150,000",
+,1 year spp2 yearly budget,"3,100,000",
+,1 year spp2 stream duration,15,12 months + Transition
+,1 year spp2 total allocation,"3,875,000",
+SPP2 execution params,Total cost of SPP2,"7,025,000",
+,Left from SPP1,"550,000",
+,Already paid on SPP2,,There are active streams that are already consuming the SPP2 budget. 
+,New allowance needed,"6,475,000",This is what goes in the EP
+Check,Yearly budget for SPP2,"4,500,000",
+,Montly budget for SPP2,"375,000",
+,Months of runway,19,It matches the runaway mentioned by Avsa: https://snapshot.box/#/s:ens.eth/proposal/0x0cca1cf36731203e235b0e2de9041be3a16d9cdeadff6e15e1f1215c611e12ef
+,Total cost of SPP2,"7,025,000",Note that this value should be equal the first value of SPP2 execution params
+,Extra notes,,"Maybe some USDC needs to be sent to metagov, to retroactively send to SPP2, because of the delay on starting the streams. This this value can be send to the stream metagov wallet and wrapped in USDCx"
