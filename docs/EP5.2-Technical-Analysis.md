@@ -321,13 +321,11 @@ Rounded: 142694063926940640
 
 1. **USDC Allowance Calculation**:
 
-   ```
-   Total needed: $8.15M (from README)
-   Remaining from SPP1: ~$0.9M
-   New allowance needed: ~$7.25M
+   Total needed: $7.025M (from README)
+   Current remaining: ~$0.9M
+   New allowance needed: ~$6.125M
 
    Add buffer for safety: $7.5M total
-   ```
 
 2. **Transition Timeline**:
 

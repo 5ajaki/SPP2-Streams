@@ -44,22 +44,22 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 ### 1. Increase USDC Allowance
 
-**Objective**: Provide sufficient allowance for full program duration plus 6-month buffer
+**Objective**: Provide sufficient allowance for full program duration plus 3-month buffer
 
 **Calculation**:
 
-- Two-year streams: $1.4M/year × 2.5 years = $3.5M
-- One-year streams: $3.1M/year × 1.5 years = $4.65M
-- Total required: $8.15M
+- Two-year streams: $1.4M/year × 2.25 years = $3.15M
+- One-year streams: $3.1M/year × 1.25 years = $3.875M
+- Total required: $7.025M
 - Current remaining: ~$0.9M
-- **Additional needed: ~$7.25M**
+- **Additional needed: ~$6.125M**
 
 **Function**: `approve(address spender, uint256 amount)`
 
 **Parameters**:
 
 - `spender`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
-- `amount`: `7250000000000` (7.25M USDC with 6 decimals)
+- `amount`: `6125000000000` (6.125M USDC with 6 decimals)
 
 **Target**: [`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) (USDC Token)
 
@@ -214,11 +214,11 @@ Superfluid Precision:
 ### Allowance Requirements
 
 ```
-Two-year streams (with 6-month buffer): $1.4M × 2.5 = $3.5M
-One-year streams (with 6-month buffer): $3.1M × 1.5 = $4.65M
-Total required: $8.15M
+Two-year streams (with 3-month buffer): $1.4M × 2.25 = $3.15M
+One-year streams (with 3-month buffer): $3.1M × 1.25 = $3.875M
+Total required: $7.025M
 Current remaining: ~$0.9M
-Additional needed: ~$7.25M
+Additional needed: ~$6.125M
 ```
 
 ### Autowrapper Scaling
