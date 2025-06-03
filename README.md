@@ -24,7 +24,8 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - **Consumed over ~16 months**: ~$4.85M (5.4M - 0.55M remaining)
 - **Remaining allowance**: $550,000 ($169k on auto-wrapper + $381k USDCx in stream)
 - **Active streams**: 6 providers continuing at SPP1 rates (3 providers terminated)
-- **Current flow rate**: ~$1.1M/year (reduced from $3.6M after terminations)
+- **Current outgoing flow**: ~$2.5M/year to providers (reduced from $3.6M)
+
 - **SPP2 program start**: May 26, 2025 (streams enacted individually as paperwork completes)
 
 ### Season 2 Composition
@@ -258,7 +259,7 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
 2. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
 3. ✅ **Contract state verified**:
    - Current USDC allowance: $550,000 ($169k on auto-wrapper + $381k USDCx)
-   - Current stream rate: ~$1.1M/year (91,667 USDCx/month)
+   - Current streams: $3.6M/year in, $2.5M/year out (net: $1.1M/year)
    - Superfluid contracts confirmed
 4. **Draft executable proposal** with three main transactions:
    - Increase USDC allowance
