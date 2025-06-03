@@ -1,7 +1,5 @@
 # SPP2 Contract State Verification Report
 
-_Generated: November 28, 2024_
-
 ## Current State Verified
 
 ### 1. ENS Treasury Balance

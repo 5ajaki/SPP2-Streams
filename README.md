@@ -23,8 +23,8 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - **Original allowance**: 5.4M USDC (set in EP5.2, February 2024)
 - **Consumed over ~16 months**: ~$4.85M (5.4M - 0.55M remaining)
 - **Remaining allowance**: $550,000 ($169k on auto-wrapper + $381k USDCx in stream)
-- **Active streams**: 6 providers continuing at SPP1 rates
-- **Current flow rate**: ~$2.5M/year (6 active SPP1 streams)
+- **Active streams**: 6 providers continuing at SPP1 rates (3 providers terminated)
+- **Current flow rate**: ~$1.1M/year (reduced from $3.6M after terminations)
 - **SPP2 program start**: May 26, 2025 (streams enacted individually as paperwork completes)
 
 ### Season 2 Composition
@@ -81,7 +81,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - `receiver`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
 - `flowRate`: `142694063926940` (0.1427 USDC/second in wei/second with 6 decimals)
 
-**Target**: Superfluid CFAv1 contract (need to verify exact address)
+**Target**: [`0xcfA132E353cB4E398080B9700609bb008eceB125`](https://etherscan.io/address/0xcfA132E353cB4E398080B9700609bb008eceB125) (Superfluid CFAv1)
 
 **Note**: This adjusts the flow rate going forward. Underpayments from May 26 to activation date are handled separately.
 
@@ -102,6 +102,8 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - `upperLimit`: `625000000000` (625,000 USDCx with 6 decimals)
 
 **Target**: Stream Management Pod Autowrapper contract
+
+**Note**: The existing auto-wrapper schedule will be updated using the `setLimits` function to scale the limits proportionally with the increased flow rate.
 
 ## Stream Transition Approach
 
