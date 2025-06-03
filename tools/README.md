@@ -68,14 +68,14 @@ node underpayment-calc.js blockful "2025-06-08 09:30"
 
 ## Provider Reference
 
-| Provider                     | SPP1 Rate | SPP2 Rate  | Rate Change | Daily Difference |
-| ---------------------------- | --------- | ---------- | ----------- | ---------------- |
-| ETH.LIMO                     | $500,000  | $700,000   | +$200,000   | +$547.57/day     |
-| Namehash Labs                | $600,000  | $1,100,000 | +$500,000   | +$1,368.93/day   |
-| Blockful                     | $300,000  | $700,000   | +$400,000   | +$1,095.14/day   |
-| Unruggable                   | $400,000  | $400,000   | No change   | $0/day           |
-| Ethereum Identity Foundation | $500,000  | $500,000   | No change   | $0/day           |
-| Namespace                    | $200,000  | $400,000   | +$200,000   | +$547.57/day     |
+| Provider                     | SPP1 Rate | SPP2 Rate | Difference | Daily Difference   |
+| ---------------------------- | --------- | --------- | ---------- | ------------------ |
+| ETH.LIMO                     | 500,000   | 700,000   | +200,000   | +547.57 USDC/day   |
+| Namehash Labs                | 600,000   | 1,100,000 | +500,000   | +1,368.93 USDC/day |
+| Blockful                     | 300,000   | 700,000   | +400,000   | +1,095.14 USDC/day |
+| Unruggable                   | 400,000   | 400,000   | No change  | 0 USDC/day         |
+| Ethereum Identity Foundation | 500,000   | 500,000   | No change  | 0 USDC/day         |
+| Namespace                    | 200,000   | 400,000   | +200,000   | +547.57 USDC/day   |
 
 ## Underpayment Calculation Formula
 
@@ -94,15 +94,15 @@ Where:
 If Namehash Labs' stream is activated on June 10, 2025 (midnight):
 
 - Time period: 14 days, 0.1 hours
-- Daily difference: $1,368.93
-- **Total underpayment: $19,171.61**
+- Daily difference: 1,368.93 USDC
+- **Total underpayment: 19,171.61 USDC**
 
 ### Example 2: Date + Time
 
 If Namehash Labs' stream is activated on June 10, 2025 at 2:30 PM UTC:
 
 - Time period: 14 days, 14.6 hours
-- Daily difference: $1,368.93
-- **Total underpayment: $19,998.67**
+- Daily difference: 1,368.93 USDC
+- **Total underpayment: 19,998.67 USDC**
 
-The extra 14.6 hours adds $827.06 in additional underpayment compensation.
+The extra 14.6 hours adds 827.06 USDC in additional underpayment compensation.
