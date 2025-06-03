@@ -41,8 +41,6 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 ## Required Transactions
 
-> **⚠️ Important**: All contract addresses and parameter values should be verified before creating the executable proposal. Some Superfluid contract addresses may need to be confirmed from their documentation.
-
 ### 1. Increase USDC Allowance
 
 **Objective**: Provide sufficient allowance for full program duration plus 3-month buffer
