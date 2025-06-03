@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the technical requirements for the executable proposal to implement Service Provider Program Season 2, transitioning from the current 3.6M USDC annual budget to the approved 4.5M USDC annual budget.
+This document outlines the technical requirements for the executable proposal to implement Service Provider Program Season 2, transitioning from the current $3.6M annual budget to the approved $4.5M annual budget.
 
 > **📚 Historical Context**: For details on how SPP1 was implemented, see [SPP1 Technical History](docs/SPP1-History.md)
 
@@ -20,11 +20,12 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 > **Note**: SPP1 streams continue running as planned while providers complete T&Cs and due diligence for SPP2
 
-- **Original allowance**: 5.4M USDC (set in EP5.2, February 2024)
-- **Consumed over ~16 months**: ~4.85M USDC (5.4M - 0.55M remaining)
-- **Remaining allowance**: 550,000 USDC (169k on auto-wrapper + 381k USDCx in stream)
+- **Original approve and wrap**: $300k - 1 months funding (see EP5.2, February 2024)
+- **Original autowrap allowance**: $5.1M USDC (see EP5.2, February 2024)
+- **Consumed over ~16 months**: ~$4.85M (5.4M - 0.55M remaining)
+- **Remaining allowance**: $550,000 ($169k on auto-wrapper + $381k USDCx in stream)
 - **Active streams**: 6 providers continuing at SPP1 rates (3 providers terminated)
-- **Current outgoing flow**: ~2.5M USDC/year to providers (reduced from 3.6M USDC)
+- **Current outgoing flow**: ~$2.5M/year to providers (reduced from $3.6M)
 
 - **SPP2 program start**: May 26, 2025 (streams enacted individually as paperwork completes)
 
@@ -35,74 +36,58 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - **2 new providers**
   - JustaName and ZK Email
 - **Total: 8 providers**
-- **Budget: 4.5M USDC annually**
-  - **Two-year streams**: 1.4M USDC/year (ETH.LIMO and Blockful)
-  - **One-year streams**: 3.1M USDC/year (6 providers)
+- **Budget: $4.5M annually**
+  - **Two-year streams**: $1.4M/year (ETH.LIMO and Blockful)
+  - **One-year streams**: $3.1M/year (6 providers)
 
 ## Required Transactions
 
-### 1. Increase USDC Allowance
+### 1. Set USDC Allowance
 
-**Objective**: Provide sufficient allowance for full program duration plus 3-month buffer
+**Objective**: Set sufficient allowance for the USDCx contract to spend one months worth of the ENS DAO Wallets USDC
 
 **Calculation**:
 
-- Two-year streams: 1.4M USDC/year × 2.25 years = 3.15M USDC
-- One-year streams: 3.1M USDC/year × 1.25 years = 3.875M USDC
-- Total required: 7.025M USDC
-- Current remaining: 550,000 USDC (169k allowance + 381k USDCx in stream)
-- **Additional needed: 6,475,000 USDC**
+- Two-year streams: $1.4M/year
+- One-year streams: $3.1M/year
+- Total: $4.5M
 
-**Function**: `approve(address spender, uint256 amount)`
+- One month: $4.5M / 12 => $375k
 
-**Parameters**:
+**Calldata**: [`approveUSDCX`](./test/calldata/test-usdc-stream.js#L113)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/df0bf63d-36de-4159-83dc-de47df01555d)
 
-- `spender`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
-- `amount`: `6475000000000` (6.475M USDC with 6 decimals)
 
-**Target**: [`0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`](https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48) (USDC Token)
+### 2. Upgrade (Wrap) USDC
 
-### 2. Update Superfluid Stream Rate
+**Objectice**: Wrap USDC from the ENS DAO wallet as USDCx to fund one month of streams.
+
+**Calldata**: [`upgradeUSDC`](./test/calldata/test-usdc-stream.js#L174)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/994435f5-9e02-48cb-8e62-d361d3ec5b3c)
+
+
+### 3. Update Superfluid Stream Rate
 
 **Objective**: Increase flow rate from wallet.ensdao.eth to Stream Management Pod
 
 **Current vs New**:
 
-- Current: 0.1141 USDC/second (~3.6M USDC/year)
-- New: 0.1427 USDC/second (~4.5M USDC/year)
+- Current: 0.1141 USDCx/second (~$3.6M/year)
+- New: 0.1426 USDCx/second (~$4.5M/year)
 - Increase: 25%
 
-**Function**: `updateFlow(address token, address receiver, int96 flowRate)`
-
-**Parameters**:
-
-- `token`: `0x1ba8603da702602a8657980e825a6daa03dee93a` (USDCx Super Token)
-- `receiver`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
-- `flowRate`: `142694063926941` (0.142694063926941 USDC/second in wei/second with 6 decimals)
-
-**Target**: [`0xcfA132E353cB4E398080B9700609bb008eceB125`](https://etherscan.io/address/0xcfA132E353cB4E398080B9700609bb008eceB125) (Superfluid CFAv1)
+**Calldata**: [`setFlowrate`](./test/calldata/test-usdc-stream.js#L240)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/b5977dbf-895a-4a81-8874-520b4446921d)
 
 **Note**: This adjusts the flow rate going forward. Underpayments from May 26 to activation date are handled separately.
 
-### 3. Update Autowrapper Parameters
+### 4. Set Autowrap Allowance
 
-**Objective**: Scale autowrapper limits for higher flow rate
+**Objective**: Set an appropriate allowance that allows the Superfluid Autowrapper contracts to wrap more ENS DAO wallet USDC to USDCx as required.
 
-**Current vs New**:
+**Calldata**: [`setAutowrapAllowance`](./test/calldata/test-usdc-stream.js#L298)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/64f42eaf-e3fa-4667-8992-458e7d3341ed)
 
-- Current: Lower 200k, Upper 500k USDCx
-- New: Lower 250k, Upper 625k USDCx (25% increase)
-
-**Function**: `setLimits(uint256 lowerLimit, uint256 upperLimit)`
-
-**Parameters**:
-
-- `lowerLimit`: `250000000000` (250,000 USDCx with 6 decimals)
-- `upperLimit`: `625000000000` (625,000 USDCx with 6 decimals)
-
-**Target**: Stream Management Pod Autowrapper contract
-
-**Note**: The existing auto-wrapper schedule will be updated using the `setLimits` function to scale the limits proportionally with the increased flow rate.
 
 ## Stream Transition Approach
 
@@ -138,24 +123,24 @@ Both tools calculate the exact underpayment based on:
 
 ### Example Calculation
 
-Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after program start:
+Provider receiving $500k SPP1, moving to $600k SPP2, activated after program start:
 
 - Time elapsed: ~10 days
-- Daily difference: 273.98 USDC (1,643.84 - 1,369.86)
-- **Underpayment owed: 2,739.80 USDC**
+- Daily difference: $273.98 ($1,643.84 - $1,369.86)
+- **Underpayment owed: $2,739.80**
 
 ### Provider Tracking Table
 
-| Provider          | Type       | SPP1 Rate | SPP2 Rate | Stream Type | Underpayment |
-| ----------------- | ---------- | --------- | --------- | ----------- | ------------ |
-| ETH.LIMO          | Continuing | 500,000   | 700,000   | 2-year      | Calculate    |
-| Namehash Labs     | Continuing | 600,000   | 1,100,000 | 1-year      | Calculate    |
-| Blockful          | Continuing | 300,000   | 700,000   | 2-year      | Calculate    |
-| Unruggable        | Continuing | 400,000   | 400,000   | 1-year      | Calculate    |
-| Ethereum Identity | Continuing | 500,000   | 500,000   | 1-year      | Calculate    |
-| Namespace         | Continuing | 200,000   | 400,000   | 1-year      | Calculate    |
-| JustaName         | New        | N/A       | 300,000   | 1-year      | N/A          |
-| ZK Email          | New        | N/A       | 400,000   | 1-year      | N/A          |
+| Provider          | Type       | SPP1 Rate | SPP2 Rate  | Stream Type | Underpayment |
+| ----------------- | ---------- | --------- | ---------- | ----------- | ------------ |
+| ETH.LIMO          | Continuing | $500,000  | $700,000   | 2-year      | Calculate    |
+| Namehash Labs     | Continuing | $600,000  | $1,100,000 | 1-year      | Calculate    |
+| Blockful          | Continuing | $300,000  | $700,000   | 2-year      | Calculate    |
+| Unruggable        | Continuing | $400,000  | $400,000   | 1-year      | Calculate    |
+| Ethereum Identity | Continuing | $500,000  | $500,000   | 1-year      | Calculate    |
+| Namespace         | Continuing | $200,000  | $400,000   | 1-year      | Calculate    |
+| JustaName         | New        | N/A       | $300,000   | 1-year      | N/A          |
+| ZK Email          | New        | N/A       | $400,000   | 1-year      | N/A          |
 
 ## Key Contract Addresses
 
@@ -170,7 +155,7 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
 
 ### Critical Dates
 
-- **EP 6.3 Vote**: February 2025 (approved 4.5M USDC budget and program renewal)
+- **EP 6.3 Vote**: February 2025 (approved $4.5M budget and program renewal)
 - **EP 6.10 Vote**: May 7-12, 2025 (selected SPP2 providers)
 - **SPP2 Target Start**: May 26, 2025 (2 weeks after EP 6.10)
 - **Allowance Depletion**: ~August 2025 (at Season 2 rate)
@@ -183,52 +168,19 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
 
 ### Original Setup (EP5.2)
 
-- **Budget**: 3.6M USDC annually
+- **Budget**: $3.6M annually
 - **Providers**: 9 selected
 - **Allowance**: 5.4M USDC (5.1M + 300k initial wrap)
 - **Flow rate**: 0.114155251141552512 USDC/second
-- **Autowrapper**: Lower 200k, Upper 500k USDCx
 
 ### Season 2 Approval (EP 6.3)
 
-- **Budget increase**: 3.6M → 4.5M USDC (+25%)
+- **Budget increase**: $3.6M → $4.5M (+25%)
 - **Provider count**: 9 → 8 (6 continuing, 2 new)
 - **Selection method**: Ranked choice voting
 - **Two-tier funding**:
-  - 2 providers on 2-year streams (1.4M USDC/year)
-  - 6 providers on 1-year streams (3.1M USDC/year)
-
-## Calculations Reference
-
-### Flow Rate Conversion
-
-```
-Annual Budget → Per Second Rate
-4.5M USDC ÷ (365 × 24 × 3600) = 0.142694063926941 USDC/second
-
-Superfluid Precision:
-- Rates must be in wei per second (18 decimals)
-- 4.5M USDC/year = 142694063926941 wei/second
-- Use exact values to avoid rounding errors
-```
-
-### Allowance Requirements
-
-```
-Two-year streams (with 3-month buffer): 1.4M USDC × 2.25 = 3.15M USDC
-One-year streams (with 3-month buffer): 3.1M USDC × 1.25 = 3.875M USDC
-Total required: 7.025M USDC
-Current remaining: 550,000 USDC
-Additional needed: 6,475,000 USDC
-```
-
-### Autowrapper Scaling
-
-```
-Original limits designed for 3.6M USDC rate
-Season 2 is 25% increase (4.5M ÷ 3.6M = 1.25)
-Scale limits by same factor: 200k → 250k, 500k → 625k
-```
+  - 2 providers on 2-year streams ($1.4M/year)
+  - 6 providers on 1-year streams ($3.1M/year)
 
 ## Related Forum Discussions
 
@@ -256,12 +208,12 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
 1. ✅ **Provider allocations confirmed** - SPP2 rates defined in EP 6.10
 2. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
 3. ✅ **Contract state verified**:
-   - Current USDC allowance: 550,000 USDC (169k on auto-wrapper + 381k USDCx)
-   - Current streams: 3.6M USDC/year in, 2.5M USDC/year out (net: 1.1M USDC/year)
+   - Current USDC allowance: $550,000 ($169k on auto-wrapper + $381k USDCx)
+   - Current streams: $3.6M/year in, $2.5M/year out (net: $1.1M/year)
    - Superfluid contracts confirmed
 4. **Draft executable proposal** with three main transactions:
    - Increase USDC allowance
-   - Update master stream rate to 4.5M USDC/year
+   - Update master stream rate to $4.5M/year
    - Update autowrapper limits
 5. **Submit for DAO vote** before allowance depletion (~August 2025)
 6. **After proposal execution**, for each provider:
@@ -278,6 +230,14 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
   - ENS DAO [Meta-Governance Working Group Safe](https://etherscan.io/address/0x91c32893216dE3eA0a55ABb9851f581d4503d39b)
 - **Implementation Pattern**: Mirrors SPP1 where providers continued receiving funds while completing paperwork
 - **Underpayment Compensation**: Continuing providers receive direct payments for the difference between SPP1 and SPP2 rates from May 26, 2025
+
+## Testing/Calldata Generation
+
+- Copy `.env.example` to `.env`
+- Set `INFURA_API_KEY`
+- (Optional) Set `TENDERLY_API_KEY`, `TENDERLY_USERNAME`, and `TENDERLY_PROJECT` to generate Tenderly simulations.
+- Run `bun run test/run-it.js`
+
 
 ---
 
