@@ -83,7 +83,7 @@ node underpayment-calc.js blockful "2025-06-08 09:30"
 Underpayment = Daily Rate Difference × Time Elapsed
 
 Where:
-- Daily Rate Difference = (SPP2 Annual Rate - SPP1 Annual Rate) / 365.25
+- Daily Rate Difference = (SPP2 Annual Rate - SPP1 Annual Rate) / 365
 - Time Elapsed = Stream Activation DateTime - May 26, 2025 11:53 PM UTC
 ```
 

@@ -79,7 +79,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 - `token`: `0x1ba8603da702602a8657980e825a6daa03dee93a` (USDCx Super Token)
 - `receiver`: `0xB162Bf7A7fD64eF32b787719335d06B2780e31D1` (Stream Management Pod)
-- `flowRate`: `142694063926940` (0.1427 USDC/second in wei/second with 6 decimals)
+- `flowRate`: `142694063926941` (0.142694063926941 USDC/second in wei/second with 6 decimals)
 
 **Target**: [`0xcfA132E353cB4E398080B9700609bb008eceB125`](https://etherscan.io/address/0xcfA132E353cB4E398080B9700609bb008eceB125) (Superfluid CFAv1)
 
@@ -205,11 +205,11 @@ Provider receiving $500k SPP1, moving to $600k SPP2, activated after program sta
 
 ```
 Annual Budget → Per Second Rate
-$4.5M ÷ (365.25 × 24 × 3600) ≈ 0.1427 USDC/second
+$4.5M ÷ (365 × 24 × 3600) = 0.142694063926941 USDC/second
 
 Superfluid Precision:
 - Rates must be in wei per second (18 decimals)
-- $4.5M/year = 142694063926940639269 wei/second
+- $4.5M/year = 142694063926941 wei/second
 - Use exact values to avoid rounding errors
 ```
 

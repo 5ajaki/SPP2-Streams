@@ -19,8 +19,8 @@ const PROVIDERS = {
 };
 
 const SPP2_START = new Date("2025-05-26T23:53:00Z");
-const DAYS_PER_YEAR = 365.25;
-const HOURS_PER_YEAR = 8766; // 365.25 * 24
+const DAYS_PER_YEAR = 365;
+const HOURS_PER_YEAR = 8760; // 365 * 24
 
 function formatTimePeriod(hours) {
   const days = Math.floor(hours / 24);

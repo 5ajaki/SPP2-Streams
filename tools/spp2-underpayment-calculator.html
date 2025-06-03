@@ -224,10 +224,10 @@
     </div>
 
     <script>
-      // SPP2 program start date
+      // Constants
       const SPP2_START = new Date("2025-05-26T23:53:00Z");
-      const DAYS_PER_YEAR = 365.25;
-      const HOURS_PER_YEAR = 8766; // 365.25 * 24
+      const DAYS_PER_YEAR = 365; // 2025 is not a leap year
+      const HOURS_PER_YEAR = 8760; // 365 * 24
 
       // Set default date to today and time to current time
       document.getElementById("activation-date").valueAsDate = new Date();
