@@ -108,20 +108,20 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 ### Overview
 
-- **Continuing providers**: Adjust stream rate and send underpayment compensation
-- **New providers**: Start fresh streams at SPP2 rates
+- **Continuing providers**: Update stream rate to the Season Two amount + send underpayment compensation
+- **New providers**: Start fresh streams backdated to May 26, 2025 11:53 PM UTC
 
 ### Implementation Steps
 
-1. **For continuing providers:**
+1. **For continuing providers (cannot backdate existing streams):**
 
    - Calculate underpayment from May 26 to activation date using the tools
-   - Update stream to new SPP2 rate
-   - Send underpayment as one-time USDC payment
+   - Update stream to new SPP2 rate (effective immediately)
+   - Send underpayment as one-time USDC payment to cover the gap
 
-2. **For new providers:**
-   - Simply start new stream at SPP2 rate
-   - No underpayment calculation needed
+2. **For new providers (can backdate new streams):**
+   - Create new stream at SPP2 rate backdated to May 26, 2025 at 11:53 pm UTC.
+   - No underpayment calculation needed (backdating handles it automatically)
 
 ### Underpayment Calculation Tools
 
