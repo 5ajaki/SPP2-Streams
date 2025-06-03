@@ -107,7 +107,7 @@ if (require.main === module) {
     console.log("\nProviders:");
     Object.entries(PROVIDERS).forEach(([key, p]) => {
       const diff = p.spp2 - p.spp1;
-      const status = diff > 0 ? `+$${diff.toLocaleString()}` : "No change";
+      const status = diff > 0 ? `+${diff.toLocaleString()} USDC` : "No change";
       console.log(`  ${key.padEnd(20)} - ${p.name} (${status})`);
     });
     console.log("\nDate/Time formats:");
@@ -151,18 +151,22 @@ if (require.main === module) {
     `Time Period:           ${formatTimePeriod(result.hoursElapsed)}`
   );
   console.log(
-    `SPP1 Daily Rate:       $${(result.spp1Rate / DAYS_PER_YEAR).toFixed(2)}`
+    `SPP1 Daily Rate:       ${(result.spp1Rate / DAYS_PER_YEAR).toFixed(
+      2
+    )} USDC`
   );
   console.log(
-    `SPP2 Daily Rate:       $${(result.spp2Rate / DAYS_PER_YEAR).toFixed(2)}`
+    `SPP2 Daily Rate:       ${(result.spp2Rate / DAYS_PER_YEAR).toFixed(
+      2
+    )} USDC`
   );
-  console.log(`Daily Difference:      $${result.dailyDifference}`);
+  console.log(`Daily Difference:      ${result.dailyDifference} USDC`);
 
   if (result.hasUnderpayment) {
     console.log(
-      `\nTOTAL UNDERPAYMENT:    $${parseFloat(
+      `\nTOTAL UNDERPAYMENT:    ${parseFloat(
         result.totalUnderpayment
-      ).toLocaleString()}`
+      ).toLocaleString()} USDC`
     );
   } else {
     console.log(`\nNO UNDERPAYMENT - Provider rate unchanged in SPP2`);
