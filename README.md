@@ -256,10 +256,10 @@ Scale limits by same factor: 200k → 250k, 500k → 625k
 
 1. ✅ **Provider allocations confirmed** - SPP2 rates defined in EP 6.10
 2. ✅ **Calculation tools ready** - See [`tools/`](tools/) directory
-3. **Verify current contract state**:
-   - Current USDC allowance remaining
-   - Active stream configurations
-   - Superfluid contract addresses
+3. ✅ **Contract state verified**:
+   - Current USDC allowance: $550,000 ($169k on auto-wrapper + $381k USDCx)
+   - Current stream rate: ~$1.1M/year (91,667 USDCx/month)
+   - Superfluid contracts confirmed
 4. **Draft executable proposal** with three main transactions:
    - Increase USDC allowance
    - Update master stream rate to $4.5M/year
