@@ -5,8 +5,6 @@ export const HOST_ADDR = "0x4E583d9390082B65Bef884b629DFA426114CED6d";
 export const USDC_ADDR = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 export const USDCX_ADDR = "0x1BA8603DA702602A8657980e825A6DAa03Dee93a";
 
-export const UNRUGGABLE_ADDR = "0x64Ca550F78d6Cc711B247319CC71A04A166707Ab";
-
 /**
  * Contract address: 
  * The CFAv1Forwarder contract provides an easy to use interface to

@@ -27,6 +27,8 @@ export const init = async () => {
     return { foundry, impersonatedSigner };
 }
 
+// See documentation https://docs.tenderly.co/simulations/bundled-simulations
+// transactions "get simulated one after another within the same block."
 export const simulateTransactionBundle = async (transactions) => {
 
     console.log("Simulating transactions with Tenderly...");

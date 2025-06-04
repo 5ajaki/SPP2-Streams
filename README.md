@@ -55,7 +55,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - One month: $4.5M / 12 => $375k
 
 **Calldata**: [`approveUSDCX`](./test/calldata/test-usdc-stream.js#L113)
-**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/df0bf63d-36de-4159-83dc-de47df01555d)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/d585f502-bd14-4226-8069-c922a2ae6671)
 
 
 ### 2. Upgrade (Wrap) USDC
@@ -63,7 +63,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 **Objectice**: Wrap USDC from the ENS DAO wallet as USDCx to fund one month of streams.
 
 **Calldata**: [`upgradeUSDC`](./test/calldata/test-usdc-stream.js#L174)
-**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/994435f5-9e02-48cb-8e62-d361d3ec5b3c)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/601bb530-c0dc-43d9-a9c6-0c411ab7e1dd)
 
 
 ### 3. Update Superfluid Stream Rate
@@ -77,7 +77,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 - Increase: 25%
 
 **Calldata**: [`setFlowrate`](./test/calldata/test-usdc-stream.js#L240)
-**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/b5977dbf-895a-4a81-8874-520b4446921d)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/073a3407-86e8-4f55-b3e7-72a3b5fcb263)
 
 **Note**: This adjusts the flow rate going forward. Underpayments from May 26 to activation date are handled separately.
 
@@ -86,7 +86,7 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 **Objective**: Set an appropriate allowance that allows the Superfluid Autowrapper contracts to wrap more ENS DAO wallet USDC to USDCx as required.
 
 **Calldata**: [`setAutowrapAllowance`](./test/calldata/test-usdc-stream.js#L298)
-**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/64f42eaf-e3fa-4667-8992-458e7d3341ed)
+**Simulation**: [Tenderly](https://www.tdly.co/shared/simulation/7bdb6af7-952a-4e3e-98e8-350b6ab149cd)
 
 
 ## Stream Transition Approach
