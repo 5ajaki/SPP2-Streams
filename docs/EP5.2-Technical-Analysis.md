@@ -208,7 +208,7 @@ The auto-wrapper configuration ensures continuous stream funding:
 
 ### Key Differences for SPP2
 
-1. **Budget**: $3.6M → $4.5M (25% increase)
+1. **Budget**: 3.6M USDC → 4.5M USDC (25% increase)
 2. **Provider Count**: 9 → 8 providers
 3. **Two-tier System**: 1-year and 2-year commitments
 4. **Pod Configuration**: Now 1/2 multisig (Timelock + Metagov)
@@ -222,7 +222,7 @@ The auto-wrapper configuration ensures continuous stream funding:
 2. **Update Flow Rate**:
 
    - New rate: ~142694063926940639269 wei/second
-   - Equals ~$4.5M/year
+   - Equals ~4.5M USDC/year
 
 3. **Scale Auto-wrapper Limits**:
 
@@ -274,18 +274,18 @@ Each function call in EP5.2 follows standard Ethereum ABI encoding:
 The flow rate calculation requires extreme precision:
 
 ```
-Annual Budget: $3,600,000
-Seconds per year: 31,536,000 (non-leap)
-Rate per second: $3,600,000 ÷ 31,536,000 = $0.114155251141552511774
+Annual Budget: 3,600,000 USDC
+Seconds per year: 31,536,000 (365 × 24 × 60 × 60)
+Rate per second: 3,600,000 ÷ 31,536,000 = 0.114155251141552511774 USDC
 
 With 18 decimals: 114155251141552511.774
 Rounded: 114155251141552512
 ```
 
-For SPP2 with $4.5M budget:
+For SPP2 with 4.5M USDC budget:
 
 ```
-$4,500,000 ÷ 31,536,000 = $0.142694063926940639718
+4,500,000 ÷ 31,536,000 = 0.142694063926940639718 USDC
 With 18 decimals: 142694063926940639.718
 Rounded: 142694063926940640
 ```
@@ -321,9 +321,9 @@ Rounded: 142694063926940640
 
 1. **USDC Allowance Calculation**:
 
-   Total needed: $7.025M (from README)
-   Current remaining: $550,000 ($169k allowance + $381k USDCx)
-   New allowance needed: $6,475,000
+   Total needed: 7.025M USDC (from README)
+   Current remaining: 550,000 USDC (169k allowance + 381k USDCx)
+   New allowance needed: 6,475,000 USDC
 
 2. **Transition Timeline**:
 
@@ -385,7 +385,7 @@ const POD = "0xB162Bf7A7fD64eF32b787719335d06B2780e31D1";
 // SPP2 Parameters
 const INITIAL_WRAP = 375_000; // USDC (scaled 25% from 300k)
 const AUTOWRAP_ALLOWANCE = 7_500_000; // USDC (for new allowance)
-const FLOW_RATE = "142694063926940640"; // wei/second for $4.5M/year
+const FLOW_RATE = "142694063926940640"; // wei/second for 4.5M USDC/year
 
 // Transaction 1: Approve initial wrap
 const tx1 = {
@@ -480,7 +480,7 @@ const tx5 = {
 ### Key Differences from EP5.2
 
 1. **Allowance Structure**: SPP2 needs higher total allowance due to budget increase and two-tier system
-2. **Flow Rate**: Precisely calculated for $4.5M annual budget
+2. **Flow Rate**: Precisely calculated for 4.5M USDC annual budget
 3. **Buffer Periods**: Scaled proportionally with budget increase
 4. **Transition Handling**: Additional logic needed for stopping SPP1 streams
 

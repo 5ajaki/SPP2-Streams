@@ -164,12 +164,12 @@
       </div>
 
       <div class="form-group">
-        <label for="spp1-rate">SPP1 Annual Rate (USD):</label>
+        <label for="spp1-rate">SPP1 Annual Rate (USDC):</label>
         <input type="number" id="spp1-rate" placeholder="e.g., 500000" />
       </div>
 
       <div class="form-group">
-        <label for="spp2-rate">SPP2 Annual Rate (USD):</label>
+        <label for="spp2-rate">SPP2 Annual Rate (USDC):</label>
         <input type="number" id="spp2-rate" placeholder="e.g., 700000" />
       </div>
 
@@ -208,12 +208,12 @@
 
         <div class="result-item">
           <div class="result-label">Daily Rate Difference (SPP2 - SPP1):</div>
-          <div class="result-value" id="daily-difference">$0.00</div>
+          <div class="result-value" id="daily-difference">0.00 USDC</div>
         </div>
 
         <div class="result-item highlight">
           <div class="result-label">Total Underpayment Owed:</div>
-          <div class="result-value" id="total-underpayment">$0.00</div>
+          <div class="result-value" id="total-underpayment">0.00 USDC</div>
         </div>
 
         <div class="warning" id="no-underpayment" style="display: none">
@@ -304,13 +304,13 @@
           formatTimePeriod(hoursElapsed);
         document.getElementById(
           "daily-difference"
-        ).textContent = `$${dailyDifference.toFixed(2)}`;
+        ).textContent = `${dailyDifference.toFixed(2)} USDC`;
         document.getElementById(
           "total-underpayment"
-        ).textContent = `$${totalUnderpayment.toLocaleString("en-US", {
+        ).textContent = `${totalUnderpayment.toLocaleString("en-US", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
-        })}`;
+        })} USDC`;
 
         // Show/hide no underpayment warning
         const noUnderpaymentWarning =
