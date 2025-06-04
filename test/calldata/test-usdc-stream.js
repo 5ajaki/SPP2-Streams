@@ -58,54 +58,63 @@ const TWO_YEAR_FUNDING_PER_YEAR = 1400000n;
 const ONE_YEAR_FUNDING_PER_YEAR = 3100000n;
 const TOTAL_FUNDING_PER_YEAR = TWO_YEAR_FUNDING_PER_YEAR + ONE_YEAR_FUNDING_PER_YEAR;
 
-// Amount that the ENS DAO wallet has currently approved the Autowrap strategy to spend
-// This needs to be increased to cover the entire year of funding + a buffer
-// Last year the buffer was 6 months worth of funding
-const currentAutowrapUSDCAllowance = await USDCContract.allowance(SENDER_ADDR, AUTOWRAP_STRATEGY_ADDR);
+// Lame, but I want these lazy loaded
+let UPFRONT_USDC_ALLOWANCE;
+let NEW_AUTOWRAP_ALLOWANCE;
+let USD_PER_SECOND;
 
-// Amount of USDCx that the Stream Management Pod has currently
-// For simplicity either keep this in the multsig or return it to the ENS DAO wallet post execution of this proposal
-const currentStreamManagementPodUsdcxBalance = await USDCXContract.balanceOf(STREAM_MANAGEMENT_POD);
-
-// Amount of USDCx that the DAO Wallet has currently wrapped
-// For simplicity either keep this in the multsig or return it to the ENS DAO wallet post execution of this proposal
-const currentEnsDaoWalletUsdcxBalance = await USDCXContract.balanceOf(SENDER_ADDR);
+export const stateAndRequirements = async () => {
 
 
-// Current flowrate of USDCx from the ENS DAO wallet to the Stream Management Pod
-const currentUSDCxFlowrate = await SuperfluidContract.getFlowrate(USDCX_ADDR, SENDER_ADDR, STREAM_MANAGEMENT_POD);
+    // Amount that the ENS DAO wallet has currently approved the Autowrap strategy to spend
+    // This needs to be increased to cover the entire year of funding + a buffer
+    // Last year the buffer was 6 months worth of funding
+    const currentAutowrapUSDCAllowance = await USDCContract.allowance(SENDER_ADDR, AUTOWRAP_STRATEGY_ADDR);
 
-console.log("--------------------------------");
-console.log("-------- INITIAL STATE ---------");
-console.log("CurrentAutowrap USDC Allowance", currentAutowrapUSDCAllowance / USDCDivisor);
-console.log("Stream Management Pod Current USDCx Balance", currentStreamManagementPodUsdcxBalance / USDCXDivisor);
-console.log("ENS DAO Wallet Current USDCx Balance", currentEnsDaoWalletUsdcxBalance / USDCXDivisor);
-console.log("Current USDCxFlowrate (ENS DAO wallet -> Stream Management Pod)", currentUSDCxFlowrate, Number(currentUSDCxFlowrate) / Number(USDCXDivisor));
-console.log("--------------------------------");
+    // Amount of USDCx that the Stream Management Pod has currently
+    // For simplicity either keep this in the multsig or return it to the ENS DAO wallet post execution of this proposal
+    const currentStreamManagementPodUsdcxBalance = await USDCXContract.balanceOf(STREAM_MANAGEMENT_POD);
 
-// We want an upfront allowance of 1 months worth of funding.
-const UPFRONT_USDC_ALLOWANCE = (TOTAL_FUNDING_PER_YEAR / 12n);
-
-// 3n / 2n = 1.5 (years) => 18 months
-// ERC20 `approve` method replaces the existing allowance with the new one - we don't need to consider existing allowance
-// We set the allowance to cover the entire year of funding + a buffer - the amount we wrap up front
-const NEW_AUTOWRAP_ALLOWANCE = (TOTAL_FUNDING_PER_YEAR * 3n / 2n) - UPFRONT_USDC_ALLOWANCE;
-console.log("NEW_AUTOWRAP_ALLOWANCE", NEW_AUTOWRAP_ALLOWANCE);
-assert(NEW_AUTOWRAP_ALLOWANCE === 6375000n, `Autowrap allowance is not 6375000 - ${NEW_AUTOWRAP_ALLOWANCE}`);
-
-// "There are 31,556,926 seconds in a year. While leap years account for most of the drift, 
-// you must skip a leap year in years that are divisible by 100 and not divisible by 400 to 
-// account for the slight variation. Then we also add leap seconds every now and again. 
-// We had one in 2016."
-const SECONDS_IN_YEAR = 31556926n;
-const USD_PER_SECOND = (TOTAL_FUNDING_PER_YEAR * USDCXDivisor) / SECONDS_IN_YEAR;
-assert(USD_PER_SECOND === 142599440769357573n, `USD Per Second is not 142599440769357573 - ${USD_PER_SECOND}`);
+    // Amount of USDCx that the DAO Wallet has currently wrapped
+    // For simplicity either keep this in the multsig or return it to the ENS DAO wallet post execution of this proposal
+    const currentEnsDaoWalletUsdcxBalance = await USDCXContract.balanceOf(SENDER_ADDR);
 
 
-console.log("--------------------------------");
-console.log("-------- REQUIREMENTS ---------");
-console.log("Upfront USDC Allowance", UPFRONT_USDC_ALLOWANCE);
-console.log("Required USDCxFlowrate (ENS DAO wallet -> Stream Management Pod)", USD_PER_SECOND, Number(USD_PER_SECOND) / Number(USDCXDivisor));
+    // Current flowrate of USDCx from the ENS DAO wallet to the Stream Management Pod
+    const currentUSDCxFlowrate = await SuperfluidContract.getFlowrate(USDCX_ADDR, SENDER_ADDR, STREAM_MANAGEMENT_POD);
+
+    console.log("--------------------------------");
+    console.log("-------- INITIAL STATE ---------");
+    console.log("Current Autowrap USDC Allowance", currentAutowrapUSDCAllowance / USDCDivisor);
+    console.log("Stream Management Pod Current USDCx Balance", currentStreamManagementPodUsdcxBalance / USDCXDivisor);
+    console.log("ENS DAO Wallet Current USDCx Balance", currentEnsDaoWalletUsdcxBalance / USDCXDivisor);
+    console.log("Current USDCxFlowrate (ENS DAO wallet -> Stream Management Pod)", currentUSDCxFlowrate, Number(currentUSDCxFlowrate) / Number(USDCXDivisor));
+    console.log("--------------------------------");
+
+    // We want an upfront allowance of 1 months worth of funding.
+    UPFRONT_USDC_ALLOWANCE = (TOTAL_FUNDING_PER_YEAR / 12n);
+
+    // 3n / 2n = 1.5 (years) => 18 months
+    // ERC20 `approve` method replaces the existing allowance with the new one - we don't need to consider existing allowance
+    // We set the allowance to cover the entire year of funding + a buffer - the amount we wrap up front
+    NEW_AUTOWRAP_ALLOWANCE = (TOTAL_FUNDING_PER_YEAR * 3n / 2n) - UPFRONT_USDC_ALLOWANCE;
+    assert(NEW_AUTOWRAP_ALLOWANCE === 6375000n, `Autowrap allowance is not 6375000 - ${NEW_AUTOWRAP_ALLOWANCE}`);
+
+    // "There are 31,556,926 seconds in a year. While leap years account for most of the drift, 
+    // you must skip a leap year in years that are divisible by 100 and not divisible by 400 to 
+    // account for the slight variation. Then we also add leap seconds every now and again. 
+    // We had one in 2016."
+    const SECONDS_IN_YEAR = 31556926n;
+    USD_PER_SECOND = (TOTAL_FUNDING_PER_YEAR * USDCXDivisor) / SECONDS_IN_YEAR;
+    assert(USD_PER_SECOND === 142599440769357573n, `USD Per Second is not 142599440769357573 - ${USD_PER_SECOND}`);
+
+
+    console.log("--------------------------------");
+    console.log("--------- REQUIREMENTS ---------");
+    console.log("Upfront USDC Allowance", UPFRONT_USDC_ALLOWANCE);
+    console.log("Required USDCxFlowrate (ENS DAO wallet -> Stream Management Pod)", USD_PER_SECOND, Number(USD_PER_SECOND) / Number(USDCXDivisor));
+    console.log("--------------------------------");
+}
 
 /**
  * This function approves the Super USDCX contract to spend one months worth of USDC on behalf of the sender, the ENS DAO wallet.
@@ -179,8 +188,8 @@ export const upgradeUSDC = async () => {
     console.log("-------------------");
     console.log("-------------------");
 
-    const USDC_UPGRADE_AMOUNT = UPFRONT_USDC_ALLOWANCE * USDCDivisor;
-    assert(USDC_UPGRADE_AMOUNT === 375000000000n, `USDC Upgrade Amount is not 375000000000 - ${USDC_UPGRADE_AMOUNT}`);
+    const USDC_UPGRADE_AMOUNT = UPFRONT_USDC_ALLOWANCE * USDCXDivisor;
+    assert(USDC_UPGRADE_AMOUNT === 375000000000000000000000n, `USDC Upgrade Amount is not 375000000000000000000000 - ${USDC_UPGRADE_AMOUNT}`);
     const upgradeUSDCArguments = [USDC_UPGRADE_AMOUNT];
     const upgradeUSDCCalldata = USDCXContract.interface.encodeFunctionData("upgrade", upgradeUSDCArguments);
 
@@ -195,9 +204,9 @@ export const upgradeUSDC = async () => {
     console.log(upgradeUSDCCalldata);
     console.log("-------------------");
 
-    // The USDCX balance of the DAO wallet is affected independently of this executable - this could be anything
+    // The USDCx balance of the DAO wallet is affected independently of this executable - this could be anything
     const USDCXBalanceBeforeUpgrade = await USDCXContract.balanceOf(SENDER_ADDR);
-    //console.log("USDCXBalanceBeforeUpgrade", USDCXBalanceBeforeUpgrade / USDCXDivisor);
+    console.log("USDCXBalanceBeforeUpgrade", USDCXBalanceBeforeUpgrade / USDCXDivisor);
 
     // Send the transaction
     const upgradeUSDCTx = await impersonatedSigner.sendTransaction({
@@ -219,10 +228,11 @@ export const upgradeUSDC = async () => {
 
     const USDCXBalanceAfterUpgrade = await USDCXContract.balanceOf(SENDER_ADDR);
 
+    console.log("USDCXBalanceAfterUpgrade", USDCXBalanceAfterUpgrade / USDCXDivisor);
+
     // USDCX has 18 decimals, USDC has 6. The before/after assertion needs to made considering the conversion.
-    const USDCX_UPGRADE_AMOUNT = UPFRONT_USDC_ALLOWANCE * USDCXDivisor;
-    const USDCX_BALANCE_DIFFERENCE = ((USDCXBalanceBeforeUpgrade + USDCX_UPGRADE_AMOUNT) - USDCXBalanceAfterUpgrade) / USDCXDivisor;
-    assert(USDCX_BALANCE_DIFFERENCE == 375000n, "Formatted USDCX Balance After Upgrade is not 100000n");
+    const USDCX_BALANCE_DIFFERENCE = (USDCXBalanceAfterUpgrade / USDCXDivisor) - (USDCXBalanceBeforeUpgrade / USDCXDivisor);
+    assert(USDCX_BALANCE_DIFFERENCE == 375000n || USDCX_BALANCE_DIFFERENCE == 374999n, `Formatted USDCX Balance After Upgrade is not 375000/375499 - ${USDCX_BALANCE_DIFFERENCE}`);
 
     // Format output
     console.log("");
