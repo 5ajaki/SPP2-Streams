@@ -215,9 +215,9 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
    - Set autowrap allowance for ongoing operations
 5. ✅ **Submit for DAO vote** before allowance depletion (~August 2025)
 6. **After proposal execution**, for each provider:
-   - Calculate exact underpayment using the tools
-   - Execute stream transitions as paperwork completes
-   - Send underpayment compensations
+   - For the returning providers: Calculate exact underpayment using the tools
+   - Execute stream transitions if the paperwork is completed
+   - Send underpayment compensation to returning providers
 
 ## Notes
 
