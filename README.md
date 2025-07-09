@@ -217,17 +217,19 @@ Both tools calculate the exact backpay amount based on:
    - Current USDC allowance: 550,000 USDC (169k on auto-wrapper + 381k USDCx)
    - Current streams: 3.6M USDC/year in, 2.5M USDC/year out (net: 1.1M USDC/year)
    - Superfluid contracts confirmed
-4. **Draft executable proposal** with four main transactions:
+4. ✅ **Draft executable proposal** with four main transactions:
    - Set USDC allowance for USDCx contract
    - Wrap USDC to USDCx (one month funding)
    - Update master stream rate to 4.5M USDC/year
    - Set autowrap allowance for ongoing operations
-5. **Submit for DAO vote** before allowance depletion (~August 2025)
+5. ✅ **Submit for DAO vote** before allowance depletion (~August 2025)
 6. **After proposal execution**, for each provider:
+
    - Calculate exact backpay amount using the tools
    - All providers verify their backpay calculations
    - Execute stream transitions as paperwork completes
    - Send backpay compensations
+
 
 ## Notes
 
