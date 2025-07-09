@@ -1,10 +1,17 @@
-# SPP2 Underpayment Calculation Tools
+# SPP2 Backpay Calculation Tools
 
-This directory contains two tools for calculating underpayment owed to continuing providers between the SPP2 start date (May 26, 2025 11:53 PM UTC) and when their stream is activated.
+This directory contains two tools for calculating backpay owed to all providers between the SPP2 start date (May 26, 2025 11:53 PM UTC) and when their stream is activated.
 
-## Why Underpayment?
+## Why Backpay Calculations?
 
-Continuing providers are entitled to SPP2 rates starting May 26, 2025 at 11:53 PM UTC. However, their actual streams might be activated days or weeks later. These tools calculate the compensation owed for that gap period.
+All providers are entitled to SPP2 rates starting May 26, 2025 at 11:53 PM UTC. However, their actual streams will be activated as paperwork completes. These tools calculate the backpay compensation for that gap period.
+
+**The calculation differs by provider type:**
+
+- **Returning providers**: Backpay = (SPP2 rate - SPP1 rate) × time elapsed
+- **New providers**: Backpay = SPP2 rate × time elapsed
+
+All providers should review their backpay calculations to ensure accuracy.
 
 ## Tools Available
 
@@ -68,22 +75,27 @@ node underpayment-calc.js blockful "2025-06-08 09:30"
 
 ## Provider Reference
 
-| Provider                     | SPP1 Rate | SPP2 Rate | Difference | Daily Difference   |
-| ---------------------------- | --------- | --------- | ---------- | ------------------ |
-| ETH.LIMO                     | 500,000   | 700,000   | +200,000   | +547.57 USDC/day   |
-| Namehash Labs                | 600,000   | 1,100,000 | +500,000   | +1,368.93 USDC/day |
-| Blockful                     | 300,000   | 700,000   | +400,000   | +1,095.14 USDC/day |
-| Unruggable                   | 400,000   | 400,000   | No change  | 0 USDC/day         |
-| Ethereum Identity Foundation | 500,000   | 500,000   | No change  | 0 USDC/day         |
-| Namespace                    | 200,000   | 400,000   | +200,000   | +547.57 USDC/day   |
+| Provider                     | Type      | SPP1 Rate | SPP2 Rate | Daily Backpay     |
+| ---------------------------- | --------- | --------- | --------- | ----------------- |
+| ETH.LIMO                     | Returning | 500,000   | 700,000   | 547.95 USDC/day   |
+| Namehash Labs                | Returning | 600,000   | 1,100,000 | 1,369.86 USDC/day |
+| Blockful                     | Returning | 300,000   | 700,000   | 1,095.89 USDC/day |
+| Unruggable                   | Returning | 400,000   | 400,000   | 0 USDC/day        |
+| Ethereum Identity Foundation | Returning | 500,000   | 500,000   | 0 USDC/day        |
+| Namespace                    | Returning | 200,000   | 400,000   | 547.95 USDC/day   |
+| JustaName                    | New       | N/A       | 300,000   | 821.92 USDC/day   |
+| ZK Email                     | New       | N/A       | 400,000   | 1,095.89 USDC/day |
 
-## Underpayment Calculation Formula
+## Backpay Calculation Formula
 
 ```
-Underpayment = Daily Rate Difference × Time Elapsed
+For returning providers:
+Backpay = (SPP2 Annual Rate - SPP1 Annual Rate) / 365 × Time Elapsed
+
+For new providers:
+Backpay = SPP2 Annual Rate / 365 × Time Elapsed
 
 Where:
-- Daily Rate Difference = (SPP2 Annual Rate - SPP1 Annual Rate) / 365
 - Time Elapsed = Stream Activation DateTime - May 26, 2025 11:53 PM UTC
 ```
 

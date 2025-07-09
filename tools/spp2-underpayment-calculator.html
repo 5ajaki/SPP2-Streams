@@ -125,12 +125,12 @@
   </head>
   <body>
     <div class="container">
-      <h1>ENS DAO SPP2 Underpayment Calculator</h1>
+      <h1>ENS DAO SPP2 Backpay Calculator</h1>
 
       <div class="info">
-        <strong>Purpose:</strong> Calculate how much extra is owed to continuing
-        providers for the period between SPP2 start (May 26, 2025 11:53 PM UTC)
-        and when their stream is actually activated.
+        <strong>Purpose:</strong> Calculate backpay owed to all providers for
+        the period between SPP2 start (May 26, 2025 11:53 PM UTC) and when their
+        stream is actually activated.
       </div>
 
       <div class="form-group">
@@ -138,26 +138,32 @@
         <select id="provider" onchange="updateRates()">
           <option value="">-- Select a Provider --</option>
           <option value="ethlimo" data-spp1="500000" data-spp2="700000">
-            ETH.LIMO
+            ETH.LIMO (Returning)
           </option>
           <option value="namehash" data-spp1="600000" data-spp2="1100000">
-            Namehash Labs
+            Namehash Labs (Returning)
           </option>
           <option value="blockful" data-spp1="300000" data-spp2="700000">
-            Blockful
+            Blockful (Returning)
           </option>
           <option value="unruggable" data-spp1="400000" data-spp2="400000">
-            Unruggable (No underpayment)
+            Unruggable (Returning - No change)
           </option>
           <option
             value="ethereum-identity"
             data-spp1="500000"
             data-spp2="500000"
           >
-            Ethereum Identity Foundation (No underpayment)
+            Ethereum Identity Foundation (Returning - No change)
           </option>
           <option value="namespace" data-spp1="200000" data-spp2="400000">
-            Namespace
+            Namespace (Returning)
+          </option>
+          <option value="justaname" data-spp1="0" data-spp2="300000">
+            JustaName (New)
+          </option>
+          <option value="zkemail" data-spp1="0" data-spp2="400000">
+            ZK Email (New)
           </option>
           <option value="custom">Custom Provider</option>
         </select>
@@ -165,7 +171,11 @@
 
       <div class="form-group">
         <label for="spp1-rate">SPP1 Annual Rate (USDC):</label>
-        <input type="number" id="spp1-rate" placeholder="e.g., 500000" />
+        <input
+          type="number"
+          id="spp1-rate"
+          placeholder="e.g., 500000 (0 for new providers)"
+        />
       </div>
 
       <div class="form-group">
@@ -185,11 +195,11 @@
       </div>
 
       <button class="calculate-btn" onclick="calculate()">
-        Calculate Underpayment
+        Calculate Backpay
       </button>
 
       <div id="results" class="results">
-        <h2>Underpayment Calculation</h2>
+        <h2>Backpay Calculation</h2>
 
         <div class="result-item">
           <div class="result-label">SPP2 Start:</div>
@@ -207,18 +217,18 @@
         </div>
 
         <div class="result-item">
-          <div class="result-label">Daily Rate Difference (SPP2 - SPP1):</div>
+          <div class="result-label">Daily Backpay Rate:</div>
           <div class="result-value" id="daily-difference">0.00 USDC</div>
         </div>
 
         <div class="result-item highlight">
-          <div class="result-label">Total Underpayment Owed:</div>
+          <div class="result-label">Total Backpay Owed:</div>
           <div class="result-value" id="total-underpayment">0.00 USDC</div>
         </div>
 
         <div class="warning" id="no-underpayment" style="display: none">
-          <strong>Note:</strong> This provider has the same rate in SPP1 and
-          SPP2, so no underpayment compensation is needed.
+          <strong>Note:</strong> This returning provider has the same rate in
+          SPP1 and SPP2, so no backpay compensation is needed.
         </div>
       </div>
     </div>

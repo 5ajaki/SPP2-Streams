@@ -6,7 +6,7 @@ This document outlines the technical requirements for the executable proposal to
 
 > **📚 Historical Context**: For details on how SPP1 was implemented, see [SPP1 Technical History](docs/SPP1-History.md)
 
-> **🧮 Calculation Tools**: Underpayment calculators for continuing providers are available in the [`tools/`](tools/) directory.
+> **🧮 Calculation Tools**: Underpayment calculators for all providers are available in the [`tools/`](tools/) directory.
 
 ## Current Situation
 
@@ -90,54 +90,63 @@ ENS Treasury → Stream Management Pod → Individual Service Providers
 
 ### Overview
 
-- **Continuing providers**: Update stream rate to the Season Two amount + send underpayment compensation
-- **New providers**: Start fresh streams backdated to May 26, 2025 11:53 PM UTC
+All providers will have their SPP2 streams activated as soon as possible, with backpay compensation for the period from May 26, 2025 to activation date.
 
 ### Implementation Steps
 
-1. **For continuing providers (cannot backdate existing streams):**
+1. **All providers:**
 
-   - Calculate underpayment from May 26 to activation date using the tools
-   - Update stream to new SPP2 rate (effective immediately)
-   - Send underpayment as one-time USDC payment to cover the gap
+   - Activate stream at SPP2 rate as soon as paperwork completes
+   - Calculate backpay from May 26 to activation date using the tools
+   - Send backpay as one-time USDC payment
 
-2. **For new providers (can backdate new streams):**
-   - Create new stream at SPP2 rate backdated to May 26, 2025 at 11:53 pm UTC.
-   - No underpayment calculation needed (backdating handles it automatically)
+2. **Backpay calculation differences:**
+   - **Returning providers**: Receive the difference between SPP2 and SPP1 rates (since they've been receiving SPP1 streams)
+   - **New providers**: Receive the full SPP2 rate for the period (since they haven't been receiving any stream)
 
-### Underpayment Calculation Tools
+### Backpay Calculation Tools
 
 **Available in the [`tools/`](tools/) directory:**
 
 - **Web Calculator**: [`tools/spp2-underpayment-calculator.html`](tools/spp2-underpayment-calculator.html)
 - **CLI Tool**: [`tools/underpayment-calc.js`](tools/underpayment-calc.js)
 
-Both tools calculate the exact underpayment based on:
+Both tools calculate the exact backpay amount based on:
 
-- Provider's SPP1 and SPP2 rates
+- Provider's SPP2 rate (and SPP1 rate for returning providers)
 - Exact activation date/time
 - Time elapsed since May 26, 2025 11:53 PM UTC
 
+**Note**: All providers should review their backpay calculations to ensure accuracy.
+
 ### Example Calculation
 
-Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after program start:
+**Returning Provider (e.g., ETH.LIMO):**
 
-- Time elapsed: ~10 days
-- Daily difference: 273.98 USDC (1,643.84 - 1,369.86)
-- **Underpayment owed: 2,739.80 USDC**
+- SPP1 rate: 500k USDC/year, SPP2 rate: 700k USDC/year
+- Time elapsed: 10 days
+- Daily backpay: 547.95 USDC (700k - 500k)/365
+- **Total backpay: 5,479.50 USDC**
+
+**New Provider (e.g., JustaName):**
+
+- SPP2 rate: 300k USDC/year (no SPP1 rate)
+- Time elapsed: 10 days
+- Daily backpay: 821.92 USDC (300k/365)
+- **Total backpay: 8,219.20 USDC**
 
 ### Provider Tracking Table
 
-| Provider          | Type       | SPP1 Rate    | SPP2 Rate      | Stream Type | Underpayment |
-| ----------------- | ---------- | ------------ | -------------- | ----------- | ------------ |
-| ETH.LIMO          | Continuing | 500,000 USDC | 700,000 USDC   | 2-year      | Calculate    |
-| Namehash Labs     | Continuing | 600,000 USDC | 1,100,000 USDC | 1-year      | Calculate    |
-| Blockful          | Continuing | 300,000 USDC | 700,000 USDC   | 2-year      | Calculate    |
-| Unruggable        | Continuing | 400,000 USDC | 400,000 USDC   | 1-year      | Calculate    |
-| Ethereum Identity | Continuing | 500,000 USDC | 500,000 USDC   | 1-year      | Calculate    |
-| Namespace         | Continuing | 200,000 USDC | 400,000 USDC   | 1-year      | Calculate    |
-| JustaName         | New        | N/A          | 300,000 USDC   | 1-year      | N/A          |
-| ZK Email          | New        | N/A          | 400,000 USDC   | 1-year      | N/A          |
+| Provider          | Type      | SPP1 Rate    | SPP2 Rate      | Stream Type | Daily Backpay Rate |
+| ----------------- | --------- | ------------ | -------------- | ----------- | ------------------ |
+| ETH.LIMO          | Returning | 500,000 USDC | 700,000 USDC   | 2-year      | 547.95 USDC        |
+| Namehash Labs     | Returning | 600,000 USDC | 1,100,000 USDC | 1-year      | 1,369.86 USDC      |
+| Blockful          | Returning | 300,000 USDC | 700,000 USDC   | 2-year      | 1,095.89 USDC      |
+| Unruggable        | Returning | 400,000 USDC | 400,000 USDC   | 1-year      | 0.00 USDC          |
+| Ethereum Identity | Returning | 500,000 USDC | 500,000 USDC   | 1-year      | 0.00 USDC          |
+| Namespace         | Returning | 200,000 USDC | 400,000 USDC   | 1-year      | 547.95 USDC        |
+| JustaName         | New       | N/A          | 300,000 USDC   | 1-year      | 821.92 USDC        |
+| ZK Email          | New       | N/A          | 400,000 USDC   | 1-year      | 1,095.89 USDC      |
 
 ## Key Contract Addresses
 
@@ -159,7 +168,7 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
 
 ### Implementation Priority
 
-**Standard Practice**: Like SPP1's implementation in February 2024, continuing providers continue receiving their existing rates while completing paperwork. The underpayment compensation method ensures all providers receive their full SPP2 allocation from May 26, 2025 through direct payments.
+**Standard Practice**: Like SPP1's implementation in February 2024, returning providers continue receiving their existing SPP1 rates while completing paperwork. New providers will have their streams activated once paperwork completes. The backpay compensation method ensures all providers receive their full SPP2 allocation from May 26, 2025 through direct payments.
 
 ## Historical Context
 
@@ -215,9 +224,10 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
    - Set autowrap allowance for ongoing operations
 5. **Submit for DAO vote** before allowance depletion (~August 2025)
 6. **After proposal execution**, for each provider:
-   - Calculate exact underpayment using the tools
+   - Calculate exact backpay amount using the tools
+   - All providers verify their backpay calculations
    - Execute stream transitions as paperwork completes
-   - Send underpayment compensations
+   - Send backpay compensations
 
 ## Notes
 
@@ -227,7 +237,7 @@ Provider receiving 500k USDC SPP1, moving to 600k USDC SPP2, activated after pro
   - ENS DAO [Timelock](https://etherscan.io/address/0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7)
   - ENS DAO [Meta-Governance Working Group Safe](https://etherscan.io/address/0x91c32893216dE3eA0a55ABb9851f581d4503d39b)
 - **Implementation Pattern**: Mirrors SPP1 where providers continued receiving funds while completing paperwork
-- **Underpayment Compensation**: Continuing providers receive direct payments for the difference between SPP1 and SPP2 rates from May 26, 2025
+- **Backpay Compensation**: All providers receive backpay payments for the period from May 26, 2025 to stream activation. Returning providers receive the difference between SPP1 and SPP2 rates, while new providers receive the full SPP2 rate for the period.
 
 ## Testing/Calldata Generation
 

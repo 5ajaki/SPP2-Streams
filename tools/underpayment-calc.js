@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * SPP2 Underpayment Calculator
- * Calculate underpayment owed to continuing providers between SPP2 start and stream activation
+ * SPP2 Backpay Calculator
+ * Calculate backpay owed to all providers between SPP2 start and stream activation
  */
 
 const PROVIDERS = {
@@ -16,6 +16,8 @@ const PROVIDERS = {
     spp2: 500000,
   },
   namespace: { name: "Namespace", spp1: 200000, spp2: 400000 },
+  justaname: { name: "JustaName", spp1: 0, spp2: 300000 },
+  zkemail: { name: "ZK Email", spp1: 0, spp2: 400000 },
 };
 
 const SPP2_START = new Date("2025-05-26T23:53:00Z");
@@ -91,88 +93,93 @@ function parseDateTime(dateTimeStr) {
 }
 
 // Command line interface
-if (require.main === module) {
-  const args = process.argv.slice(2);
+const args = process.argv.slice(2);
 
-  if (args.length === 0) {
-    console.log("\nSPP2 Underpayment Calculator");
-    console.log("============================\n");
-    console.log(
-      "Calculates underpayment owed between SPP2 start (May 26, 2025 11:53 PM UTC)"
-    );
-    console.log("and when the provider's stream is activated.\n");
-    console.log(
-      "Usage: node underpayment-calc.js <provider> [activation-datetime]"
-    );
-    console.log("\nProviders:");
-    Object.entries(PROVIDERS).forEach(([key, p]) => {
-      const diff = p.spp2 - p.spp1;
-      const status = diff > 0 ? `+${diff.toLocaleString()} USDC` : "No change";
-      console.log(`  ${key.padEnd(20)} - ${p.name} (${status})`);
-    });
-    console.log("\nDate/Time formats:");
-    console.log("  2025-06-15              - Midnight UTC on June 15");
-    console.log("  2025-06-15T14:30        - 2:30 PM UTC on June 15");
-    console.log(
-      '  "2025-06-15 14:30"      - Same as above (use quotes for space)'
-    );
-    console.log("\nExamples:");
-    console.log("  node underpayment-calc.js ethlimo 2025-06-15");
-    console.log("  node underpayment-calc.js namespace 2025-06-10T15:45");
-    console.log('  node underpayment-calc.js blockful "2025-06-08 09:30"\n');
-    process.exit(0);
-  }
-
-  const providerKey = args[0].toLowerCase();
-  const provider = PROVIDERS[providerKey];
-
-  if (!provider) {
-    console.error(`Error: Unknown provider '${args[0]}'`);
-    process.exit(1);
-  }
-
-  let activationDate;
-  try {
-    activationDate = args[1] ? parseDateTime(args[1]) : new Date();
-  } catch (e) {
-    console.error(`Error: Invalid date/time format '${args[1]}'`);
-    console.error("Use format like: 2025-06-15 or 2025-06-15T14:30");
-    process.exit(1);
-  }
-
-  const result = calculateUnderpayment(provider, activationDate);
-
-  console.log("\n" + "=".repeat(60));
-  console.log(`SPP2 Underpayment Calculation for ${result.provider}`);
-  console.log("=".repeat(60));
-  console.log(`SPP2 Start:            May 26, 2025 11:53 PM UTC`);
-  console.log(`Stream Activation:     ${activationDate.toUTCString()}`);
+if (args.length === 0) {
+  console.log("\nSPP2 Backpay Calculator");
+  console.log("========================\n");
   console.log(
-    `Time Period:           ${formatTimePeriod(result.hoursElapsed)}`
+    "Calculates backpay owed between SPP2 start (May 26, 2025 11:53 PM UTC)"
   );
+  console.log("and when the provider's stream is activated.\n");
+  console.log(
+    "Usage: node underpayment-calc.js <provider> [activation-datetime]"
+  );
+  console.log("\nProviders:");
+  Object.entries(PROVIDERS).forEach(([key, p]) => {
+    const isNew = p.spp1 === 0;
+    const diff = p.spp2 - p.spp1;
+    let status;
+    if (isNew) {
+      status = `NEW - ${p.spp2.toLocaleString()} USDC`;
+    } else if (diff > 0) {
+      status = `+${diff.toLocaleString()} USDC`;
+    } else {
+      status = "No change";
+    }
+    console.log(`  ${key.padEnd(20)} - ${p.name} (${status})`);
+  });
+  console.log("\nDate/Time formats:");
+  console.log("  2025-06-15              - Midnight UTC on June 15");
+  console.log("  2025-06-15T14:30        - 2:30 PM UTC on June 15");
+  console.log(
+    '  "2025-06-15 14:30"      - Same as above (use quotes for space)'
+  );
+  console.log("\nExamples:");
+  console.log("  node underpayment-calc.js ethlimo 2025-06-15");
+  console.log("  node underpayment-calc.js justaname 2025-06-10T15:45");
+  console.log('  node underpayment-calc.js blockful "2025-06-08 09:30"\n');
+  process.exit(0);
+}
+
+const providerKey = args[0].toLowerCase();
+const provider = PROVIDERS[providerKey];
+
+if (!provider) {
+  console.error(`Error: Unknown provider '${args[0]}'`);
+  process.exit(1);
+}
+
+let activationDate;
+try {
+  activationDate = args[1] ? parseDateTime(args[1]) : new Date();
+} catch (e) {
+  console.error(`Error: Invalid date/time format '${args[1]}'`);
+  console.error("Use format like: 2025-06-15 or 2025-06-15T14:30");
+  process.exit(1);
+}
+
+const result = calculateUnderpayment(provider, activationDate);
+
+console.log("\n" + "=".repeat(60));
+console.log(`SPP2 Backpay Calculation for ${result.provider}`);
+console.log("=".repeat(60));
+console.log(`SPP2 Start:            May 26, 2025 11:53 PM UTC`);
+console.log(`Stream Activation:     ${activationDate.toUTCString()}`);
+console.log(`Time Period:           ${formatTimePeriod(result.hoursElapsed)}`);
+
+if (provider.spp1 > 0) {
   console.log(
     `SPP1 Daily Rate:       ${(result.spp1Rate / DAYS_PER_YEAR).toFixed(
       2
     )} USDC`
   );
+}
+console.log(
+  `SPP2 Daily Rate:       ${(result.spp2Rate / DAYS_PER_YEAR).toFixed(2)} USDC`
+);
+console.log(`Daily Backpay Rate:    ${result.dailyDifference} USDC`);
+
+if (result.hasUnderpayment) {
   console.log(
-    `SPP2 Daily Rate:       ${(result.spp2Rate / DAYS_PER_YEAR).toFixed(
-      2
-    )} USDC`
+    `\nTOTAL BACKPAY:         ${parseFloat(
+      result.totalUnderpayment
+    ).toLocaleString()} USDC`
   );
-  console.log(`Daily Difference:      ${result.dailyDifference} USDC`);
-
-  if (result.hasUnderpayment) {
-    console.log(
-      `\nTOTAL UNDERPAYMENT:    ${parseFloat(
-        result.totalUnderpayment
-      ).toLocaleString()} USDC`
-    );
-  } else {
-    console.log(`\nNO UNDERPAYMENT - Provider rate unchanged in SPP2`);
-  }
-
-  console.log("=".repeat(60) + "\n");
+} else {
+  console.log(`\nNO BACKPAY - Provider rate unchanged in SPP2`);
 }
 
-module.exports = { calculateUnderpayment, PROVIDERS };
+console.log("=".repeat(60) + "\n");
+
+export { calculateUnderpayment, PROVIDERS };
