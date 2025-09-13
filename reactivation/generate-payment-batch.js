@@ -20,7 +20,17 @@ function generateSafeBatchCSV() {
 
   let csvContent = "token_type,token_address,receiver,amount,id\n";
 
-  backpayData.providers.forEach((provider, index) => {
+  // Sort providers by amount (descending) then by name (ascending) for equal amounts
+  const sortedProviders = [...backpayData.providers].sort((a, b) => {
+    // First sort by amount (descending)
+    if (b.totalBackpay !== a.totalBackpay) {
+      return b.totalBackpay - a.totalBackpay;
+    }
+    // If amounts are equal, sort alphabetically by name
+    return a.name.localeCompare(b.name);
+  });
+
+  sortedProviders.forEach((provider, index) => {
     // Round to 2 decimal places for USDCx (which has 18 decimals)
     const amount = provider.totalBackpay.toFixed(2);
     const id = `SPP2-Backpay-${provider.key}`;
@@ -43,8 +53,16 @@ function generatePaymentSummary() {
   console.log("\n📋 PAYMENT SUMMARY");
   console.log("-".repeat(40));
 
+  // Sort providers by amount (descending) then by name (ascending) for equal amounts
+  const sortedProviders = [...backpayData.providers].sort((a, b) => {
+    if (b.totalBackpay !== a.totalBackpay) {
+      return b.totalBackpay - a.totalBackpay;
+    }
+    return a.name.localeCompare(b.name);
+  });
+
   let totalAmount = 0;
-  backpayData.providers.forEach((provider) => {
+  sortedProviders.forEach((provider) => {
     console.log(
       `${provider.name.padEnd(30)} $${provider.totalBackpay
         .toFixed(2)
