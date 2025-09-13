@@ -23,7 +23,7 @@ const PROVIDERS = {
   blockful: {
     name: "Blockful",
     spp2: 700000,
-    address: "0xD27e1D2b051944C5D7221E0c1335Ff088351Ce21",
+    address: "0x6dcc3939f811E22E9Faa5B2C591Fbdbf7Ee47Ee3",
   },
   unruggable: {
     name: "Unruggable",
