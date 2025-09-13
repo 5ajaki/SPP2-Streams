@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "title": "SPP2 Reactivation Backpay Data",
+    "created": "2025-09-13",
+    "description": "Backpay calculations for SPP2 stream interruption from August 9 to September 12, 2025",
+    "calculation_method": "Daily Rate (displayed) × 33.7421 days",
+    "downtime": {
+      "start": "2025-08-09T21:24:00Z",
+      "end": "2025-09-12T15:12:35Z",
+      "totalDays": 33.7421,
+      "totalHours": 809.81,
+      "display": "33 days, 17 hours, 48 minutes, 35 seconds"
+    },
+    "namehashCorrection": {
+      "correctionTime": "2025-09-12T22:02:11Z",
+      "periodAtIncorrectRate": {
+        "hours": 6.8267,
+        "days": 0.2844
+      },
+      "incorrectRate": 1000000,
+      "correctRate": 1100000,
+      "additionalBackpay": 77.92
+    }
+  },
+  "providers": [
+    {
+      "key": "ethlimo",
+      "name": "ETH.LIMO",
+      "address": "0x934c79f3d2797E8FBc56c8657cDBA8609b4CEFd0",
+      "annualRate": 700000,
+      "dailyRate": 1917.81,
+      "baseBackpay": 64710.94,
+      "adjustment": 0,
+      "totalBackpay": 64710.94
+    },
+    {
+      "key": "namehash",
+      "name": "Namehash Labs",
+      "address": "0x4dC96AAd2Daa3f84066F3A00EC41Fd1e88c8865A",
+      "annualRate": 1100000,
+      "dailyRate": 3013.7,
+      "baseBackpay": 101688.57,
+      "adjustment": 77.92,
+      "totalBackpay": 101766.49,
+      "note": "Rate initially set to 1,000,000 then corrected to 1,100,000"
+    },
+    {
+      "key": "blockful",
+      "name": "Blockful",
+      "address": "0xD27e1D2b051944C5D7221E0c1335Ff088351Ce21",
+      "annualRate": 700000,
+      "dailyRate": 1917.81,
+      "baseBackpay": 64710.94,
+      "adjustment": 0,
+      "totalBackpay": 64710.94
+    },
+    {
+      "key": "unruggable",
+      "name": "Unruggable",
+      "address": "0xdb4e9247b31dd87Fe67B99e8E4b39f652d734068",
+      "annualRate": 400000,
+      "dailyRate": 1095.89,
+      "baseBackpay": 36977.63,
+      "adjustment": 0,
+      "totalBackpay": 36977.63
+    },
+    {
+      "key": "ethereum-identity",
+      "name": "Ethereum Identity Foundation",
+      "address": "0x47e027531dcc326e8b487e0D7e47975bbbb5A1A5",
+      "annualRate": 500000,
+      "dailyRate": 1369.86,
+      "baseBackpay": 46221.95,
+      "adjustment": 0,
+      "totalBackpay": 46221.95
+    },
+    {
+      "key": "namespace",
+      "name": "Namespace",
+      "address": "0x1679b10d4CDb02c1451F1a4cC52f9ddCDB039949",
+      "annualRate": 400000,
+      "dailyRate": 1095.89,
+      "baseBackpay": 36977.63,
+      "adjustment": 0,
+      "totalBackpay": 36977.63
+    },
+    {
+      "key": "justaname",
+      "name": "JustaName",
+      "address": "0x9dC64dF5e494c50bda31b388882E5F0f607F263C",
+      "annualRate": 300000,
+      "dailyRate": 821.92,
+      "baseBackpay": 27733.31,
+      "adjustment": 0,
+      "totalBackpay": 27733.31
+    },
+    {
+      "key": "zkemail",
+      "name": "ZK Email",
+      "address": "0xdb3f226Ae171D266175dBbE09631B80331bE67CE",
+      "annualRate": 400000,
+      "dailyRate": 1095.89,
+      "baseBackpay": 36977.63,
+      "adjustment": 0,
+      "totalBackpay": 36977.63
+    }
+  ],
+  "summary": {
+    "totalProviders": 8,
+    "totalAnnualBudget": 4500000,
+    "totalDailyRate": 12328.77,
+    "totalBaseBackpay": 415998.6,
+    "totalAdjustments": 77.92,
+    "totalBackpayOwed": 416076.52,
+    "retroactiveTransfer": 400000,
+    "remainingToDistribute": 16076.52
+  },
+  "transactions": {
+    "proposalExecution": {
+      "date": "2025-09-10T17:02:00Z",
+      "transactionHash": "https://www.tally.xyz/gov/ens/proposal/8152144177729545927999296682104713773450687318641051882785083122565237294645"
+    },
+    "streamReactivation": {
+      "date": "2025-09-12T15:12:35Z",
+      "safeTransactionHash": "0x5effc3728d4aee508d1205551e07d13e59ecb13169fbaca453e7c82009e21224",
+      "ethTransactionHash": "0x7ebbc6313ff9419bdcd7db6be239acf51feb5ddd1b8b70bfbbb4753672823b2a"
+    },
+    "namehashCorrection": {
+      "date": "2025-09-12T22:02:11Z",
+      "safeTransactionHash": "0x004adb25724058c342f07283c969be8bc92f596b95ad84aebe9010a9b85799c9",
+      "ethTransactionHash": "0xa56510ef92dc6b07fbd21596b09c9feca07b54894144de779abad00f44d816c3"
+    }
+  }
+}
