@@ -20,10 +20,10 @@ const PROVIDERS = {
     address: "0x4dC96AAd2Daa3f84066F3A00EC41Fd1e88c8865A",
     note: "Rate initially set to 1,000,000 then corrected to 1,100,000",
   },
-  blockful: {
+  blockful:   {
     name: "Blockful",
     spp2: 700000,
-    address: "0xD27e1D2b051944C5D7221E0c1335Ff088351Ce21",
+    address: "0x6dcc3939f811E22E9Faa5B2C591Fbdbf7Ee47Ee3",
   },
   unruggable: {
     name: "Unruggable",

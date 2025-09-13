@@ -10,7 +10,7 @@ import { writeFileSync } from "fs";
 
 // Load the backpay data
 const backpayData = JSON.parse(
-  readFileSync("./reactivation/backpay-data.json", "utf8")
+  readFileSync("./backpay-data.json", "utf8")
 );
 
 function generateSafeBatchCSV() {
@@ -29,7 +29,7 @@ function generateSafeBatchCSV() {
   });
 
   // Write the CSV file
-  const filename = "./reactivation/safe-batch-payments.csv";
+  const filename = "./safe-batch-payments.csv";
   writeFileSync(filename, csvContent);
 
   return { filename, totalAmount: backpayData.summary.totalBackpayOwed };
