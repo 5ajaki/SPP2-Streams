@@ -12,7 +12,7 @@ const PROVIDERS = {
   ethlimo: {
     name: "ETH.LIMO",
     spp2: 700000,
-    address: "0x934c79f3d2797E8FBc56c8657cDBA8609b4CEFd0",
+    address: "0xB352bB4E2A4f27683435f153A259f1B207218b1b",
   },
   namehash: {
     name: "Namehash Labs",
@@ -28,27 +28,27 @@ const PROVIDERS = {
   unruggable: {
     name: "Unruggable",
     spp2: 400000,
-    address: "0xdb4e9247b31dd87Fe67B99e8E4b39f652d734068",
+    address: "0x64Ca550F78d6Cc711B247319CC71A04A166707Ab",
   },
   "ethereum-identity": {
     name: "Ethereum Identity Foundation",
     spp2: 500000,
-    address: "0x47e027531dcc326e8b487e0D7e47975bbbb5A1A5",
+    address: "0xE2Cded674643743ec1316858dFD4FD2116932E63",
   },
   namespace: {
     name: "Namespace",
     spp2: 400000,
-    address: "0x1679b10d4CDb02c1451F1a4cC52f9ddCDB039949",
+    address: "0x168CAfEcFBE97dF85968Ea039CC11D10a9A44567",
   },
   justaname: {
     name: "JustaName",
     spp2: 300000,
-    address: "0x9dC64dF5e494c50bda31b388882E5F0f607F263C",
+    address: "0xdaBf4f1f58d9350731e218E25ACcaF91e0d01d33",
   },
   zkemail: {
     name: "ZK Email",
     spp2: 400000,
-    address: "0xdb3f226Ae171D266175dBbE09631B80331bE67CE",
+    address: "0xca07423a99210D1a667b33901deADfAEdA687639",
   },
 };
 
